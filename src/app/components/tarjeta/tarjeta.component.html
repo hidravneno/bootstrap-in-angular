@@ -1,12 +1,30 @@
 <div class="card mb-3">
   <div class="row g-0">
     <div class="col-md-4">
-      <img src="{{ myCard.imagen }}" class="img-fluid rounded-start" alt="porsche">
+      <img 
+        [ngSrc]="myCard?.imagen || ''" 
+        class="img-fluid rounded-start" 
+        alt="porsche" 
+        (click)="onImageClick()" 
+        style="cursor: pointer;"
+        width="400"
+        height="300"
+        priority>
     </div>
     <div class="col-md-8">
       <div class="card-body p-3 ps-5">
-        <h5 class="card-title text-center fw-bold">{{ myCard.titulo }}</h5>
-        <p class="card-text">{{ myCard.descripcion }}</p>
+        <h5 class="card-title text-center fw-bold">{{ myCard?.titulo }}</h5>
+        <div class="row">
+          <div class="col-md-6 border-end">
+            <p class="card-text">{{ myCard?.descripcion }}</p>
+          </div>
+          <div class="col-md-6 ps-3" *ngIf="myCard && myCard.caracteristicas">
+            <strong>Características:</strong>
+            <ul>
+              <li *ngFor="let item of myCard.caracteristicas.split('\n')">{{ item.trim() }}</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>

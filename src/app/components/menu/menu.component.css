@@ -3,7 +3,58 @@
     display: none;
 }
 
-/* Animación suave para la transición (opcional) */
+/* Animación suave para la transición */
 .formulario-container {
     transition: all 0.3s ease-in-out;
+}
+
+/* Estilos adicionales para validación */
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control.is-valid {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+.invalid-feedback {
+    display: block;
+    font-size: 0.875em;
+    color: #dc3545;
+    margin-top: 0.25rem;
+}
+
+.form-text {
+    font-size: 0.75em;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+/* Estilo para el botón deshabilitado */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Estilo para el badge del contador */
+.badge {
+    font-size: 0.75em;
+}
+
+/* Animación para las tarjetas nuevas */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nueva-tarjeta {
+    animation: slideIn 0.5s ease-out;
 }

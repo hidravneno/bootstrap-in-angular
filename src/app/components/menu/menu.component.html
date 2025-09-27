@@ -2,55 +2,116 @@
     <div class="menu">
         <div class="row fw-bold">
             <div class="col-12">
-                <label>Lista de Porsche</label>
+                <h1 class="display-4 mb-3 text-dark">
+                    <i class="fas fa-car-alt text-warning me-2"></i>
+                    Colección Porsche Premium
+                </h1>
+                <p class="lead text-muted mb-4">Descubre la elegancia y potencia de los modelos más exclusivos</p>
             </div>
         </div>
 
-        <!-- Formulario para agregar nueva tarjeta - Controlado con CSS display -->
-        <div class="row mt-4 mb-4 formulario-container" 
-             [ngClass]="{ 'formulario-oculto': !mostrarFormulario }">
+        <!-- Formulario para agregar nueva tarjeta - Aparece donde están las tarjetas -->
+        <div class="row" *ngIf="mostrarFormulario">
             <div class="col-12 px-4">
                 <div class="card border-primary shadow-sm">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">Agregar Nuevo Porsche</h5>
                     </div>
                     <div class="card-body p-4">
-                        <form>
+                        <form #formulario="ngForm">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="titulo" class="form-label">Título</label>
+                                    <label for="titulo" class="form-label">Título *</label>
                                     <input 
                                         type="text" 
                                         class="form-control" 
+                                        [class.is-invalid]="errores.titulo"
+                                        [class.is-valid]="!errores.titulo && nuevaTarjeta.titulo.trim()"
                                         id="titulo"
                                         [(ngModel)]="nuevaTarjeta.titulo"
                                         name="titulo"
                                         placeholder="Ej: Porsche 911 Turbo"
+                                        (blur)="validarCampo('titulo')"
+                                        (input)="validarCampo('titulo')"
+                                        maxlength="50"
                                         required>
+                                    <div class="invalid-feedback" *ngIf="errores.titulo">
+                                        {{ errores.titulo }}
+                                    </div>
+                                    <div class="form-text">
+                                        {{ nuevaTarjeta.titulo.length }}/50 caracteres
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="imagen" class="form-label">URL de la Imagen</label>
+                                    <label for="imagen" class="form-label">URL de la Imagen *</label>
                                     <input 
                                         type="text" 
                                         class="form-control" 
+                                        [class.is-invalid]="errores.imagen"
+                                        [class.is-valid]="!errores.imagen && nuevaTarjeta.imagen.trim()"
                                         id="imagen"
                                         [(ngModel)]="nuevaTarjeta.imagen"
                                         name="imagen"
-                                        placeholder="Ej: assets/mi-imagen.jpg"
+                                        placeholder="Ej: mi-imagen.jpg"
+                                        (blur)="validarCampo('imagen')"
+                                        (input)="validarCampo('imagen')"
                                         required>
+                                    <div class="invalid-feedback" *ngIf="errores.imagen">
+                                        {{ errores.imagen }}
+                                    </div>
+                                    <div class="form-text">
+                                        Se agregará automáticamente "assets/" al inicio. Formatos válidos: .jpg, .jpeg, .png, .gif, .webp, .avif
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12 mb-3">
-                                    <label for="descripcion" class="form-label">Descripción</label>
+                                    <label for="descripcion" class="form-label">Descripción *</label>
                                     <textarea 
                                         class="form-control" 
+                                        [class.is-invalid]="errores.descripcion"
+                                        [class.is-valid]="!errores.descripcion && nuevaTarjeta.descripcion.trim()"
                                         id="descripcion"
                                         [(ngModel)]="nuevaTarjeta.descripcion"
                                         name="descripcion"
                                         rows="3"
                                         placeholder="Describe las características del vehículo..."
+                                        (blur)="validarCampo('descripcion')"
+                                        (input)="validarCampo('descripcion')"
+                                        maxlength="200"
                                         required></textarea>
+                                    <div class="invalid-feedback" *ngIf="errores.descripcion">
+                                        {{ errores.descripcion }}
+                                    </div>
+                                    <div class="form-text">
+                                        {{ nuevaTarjeta.descripcion.length }}/200 caracteres
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label for="caracteristicas" class="form-label">Características *</label>
+                                    <textarea 
+                                        class="form-control" 
+                                        [class.is-invalid]="errores.caracteristicas"
+                                        [class.is-valid]="!errores.caracteristicas && nuevaTarjeta.caracteristicas.trim()"
+                                        id="caracteristicas"
+                                        [(ngModel)]="nuevaTarjeta.caracteristicas"
+                                        name="caracteristicas"
+                                        rows="3"
+                                        placeholder="Ej: Motor 4.0L bóxer
+510 CV
+0-100 km/h en 3.2s"
+                                        (blur)="validarCampo('caracteristicas')"
+                                        (input)="validarCampo('caracteristicas')"
+                                        maxlength="200"
+                                        required></textarea>
+                                    <div class="invalid-feedback" *ngIf="errores.caracteristicas">
+                                        {{ errores.caracteristicas }}
+                                    </div>
+                                    <div class="form-text">
+                                        {{ nuevaTarjeta.caracteristicas.length }}/200 caracteres
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -58,14 +119,15 @@
                                     <button 
                                         type="button" 
                                         class="btn btn-success me-3"
+                                        [disabled]="!formularioValido"
                                         (click)="agregarTarjeta()">
-                                        Agregar Tarjeta
+                                        <i class="fas fa-plus"></i> Agregar Tarjeta
                                     </button>
                                     <button 
                                         type="button" 
                                         class="btn btn-secondary"
                                         (click)="limpiarFormulario()">
-                                        Limpiar Campos
+                                        <i class="fas fa-eraser"></i> Limpiar Campos
                                     </button>
                                 </div>
                             </div>
@@ -75,10 +137,15 @@
             </div>
         </div>
 
-        <div class="row">
+        <!-- Lista de tarjetas - Solo se muestra cuando el formulario está oculto -->
+        <div class="row" *ngIf="!mostrarFormulario">
             <div class="col-12">
-                @for (elemento of listaPorsche; track elemento.titulo) {
-                    <app-tarjeta [myCard]="elemento"></app-tarjeta>
+                @for (elemento of listaPorsche; track elemento.titulo; let i = $index) {
+                    <app-tarjeta 
+                        [myCard]="elemento" 
+                        [index]="i"
+                        (cardClicked)="onCardSelected($event)">
+                    </app-tarjeta>
                 }
             </div>
         </div>
